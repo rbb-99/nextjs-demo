@@ -1,7 +1,11 @@
-import MeetupList from "../components/meetups/MeetupList";
 import { MongoClient } from "mongodb";
+import MeetupList from "../components/meetups/MeetupList";
 
-export const getStaticProps = async () => {
+function HomePage(props) {
+  return <MeetupList meetups={props.meetups} />;
+}
+
+export async function getStaticProps() {
   const client = await MongoClient.connect(process.env.MONGODB_URI);
   const db = client.db();
   const meetupsCollection = db.collection("meetups");
@@ -17,12 +21,8 @@ export const getStaticProps = async () => {
         id: meetup._id.toString(),
       })),
     },
-    revalidate: 3600,
+    revalidate: 1,
   };
-};
-
-const HomePage = (props) => {
-  return <MeetupList meetups={props.meetups} />;
-};
+}
 
 export default HomePage;
