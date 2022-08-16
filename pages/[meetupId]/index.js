@@ -11,6 +11,29 @@ const MeetupDetails = () => {
   );
 };
 
+//used in pages only where you want to use getStaticProps
+//this should return all the dynamic segments for pregeneration
+//fallback: false, when all dynamic paths are listed, true, when some
+//paths are listed for pregeneration and the others will pregenerate dynamically
+export const getStaticPaths = async () => {
+  return {
+    fallback: false,
+    paths: [
+      {
+        params: {
+          meetupId: "m1",
+        },
+      },
+      {
+        params: {
+          meetupId: "m2",
+        },
+      },
+    ],
+  };
+};
+
+//this pregenerates the page during the build process
 export const getStaticProps = async (context) => {
   // fetch data for a single meetup
   const meetupId = context.params.meetupId;
