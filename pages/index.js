@@ -19,8 +19,19 @@ const DUMMY_MEETUPS = [
   },
 ];
 
-const HomePage = () => {
-  return <MeetupList meetups={DUMMY_MEETUPS} />;
+const HomePage = (props) => {
+  return <MeetupList meetups={props.meetups} />;
+};
+
+// not executed on client side but during server build run, gets data for server side
+// render unlike with useEffect which updates data on client not server (this may affect seo)
+export const getStaticProps = async () => {
+  //fetch data from API
+  return {
+    props: {
+      meetups: DUMMY_MEETUPS,
+    },
+  };
 };
 
 export default HomePage;
