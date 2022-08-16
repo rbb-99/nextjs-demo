@@ -23,9 +23,11 @@ const HomePage = (props) => {
   return <MeetupList meetups={props.meetups} />;
 };
 
-// not executed on client side but during server build run, gets data for server side
-// render unlike with useEffect which updates data on client not server (this may affect seo)
-export const getStaticProps = async () => {
+//can perform operations that use crederntials and it won't get rendered on client
+//no need to revalidate =, cuz it runs for every incoming request
+export const getServerSideProps = async (context) => {
+  const req = context.req;
+  const res = context.res;
   //fetch data from API
   return {
     props: {
@@ -33,5 +35,21 @@ export const getStaticProps = async () => {
     },
   };
 };
+
+//context not available for getStaticProps but props available for getServerSideProps
+//caching available for getStaticProps but not for getServerSideProps
+
+// not executed on client side but during server build run, gets data for server side
+// render unlike with useEffect which updates data on client not server (this may affect seo)
+// export const getStaticProps = async () => {
+//   //fetch data from API
+//   return {
+//     props: {
+//       meetups: DUMMY_MEETUPS,
+//     },
+//     // update server every 1 hour if your site changes wrt data/else in 1 hour
+//     revalidate: 3600,
+//   };
+// };
 
 export default HomePage;
